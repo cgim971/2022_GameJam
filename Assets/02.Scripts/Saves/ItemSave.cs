@@ -8,11 +8,13 @@ public class ItemSave : ScriptableObject
     public string _itemName;
     public ItemType _itemType;
     public int _itemGrade;
+    public Sprite _itemSprite;
 }
 
 public enum ItemType
 {
     NONE,
     EGG,
-    HONEY
+    HONEY,
+    BEE
 }

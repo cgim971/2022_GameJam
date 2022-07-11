@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2992a58cd0b8c947b048c420a8ed10b, type: 3}
   m_Name: Egg_1
   m_EditorClassIdentifier: 
-  _itemName: 
+  _itemName: "\uC54C"
   _itemType: 1
-  _itemGrade: 1
+  _itemGrade: 0
+  _itemSprite: {fileID: 0}

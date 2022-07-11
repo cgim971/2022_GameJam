@@ -23,6 +23,11 @@ public class SaveManager : MonoBehaviour
         LoadFronJson();
     }
 
+    public void ResetSaveFile()
+    {
+        _userSave = new UserSave("User", 0, 0, 10, 0, 10, 0, 5);
+    }
+
     private void LoadFronJson()
     {
         if (File.Exists(SAVE_PATH + SAVE_FILENAME))
@@ -32,7 +37,7 @@ public class SaveManager : MonoBehaviour
         }
         else
         {
-            _userSave = new UserSave("User", 0, 0, 10, 0, 10);
+            ResetSaveFile();
 
             SaveToJson();
             LoadFronJson();
