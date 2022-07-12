@@ -41,17 +41,7 @@ public class UserSave
         set => GameManager.Instance._saveManager.SaveMaxBeeCount(value);
     }
 
-    public void AddTowerInfo(TowerInform inform)
-    {
-        _towerInformList.Add(inform);
-        GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
-    }
 
-    public void RemoveTowerInfo(TowerInform inform)
-    {
-        _towerInformList.Remove(inform);
-        GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
-    }
 
     // 유저의 이름
     private string _userName;
@@ -68,7 +58,25 @@ public class UserSave
 
     private int _maxBeeCount;
 
-    private List<TowerInform> _towerInformList;
+    private List<TowerInform> _towerInformList = new List<TowerInform>();
+    public void AddTowerInfo(TowerInform inform)
+    {
+        _towerInformList.Add(inform);
+        GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
+    }
+
+    public void RemoveTowerInfo(TowerInform inform)
+    {
+        _towerInformList.Remove(inform);
+        GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
+    }
+
+    private List<int> _beeLvList = new List<int>();
+    public void ChangeBeeInfo(int index, int value)
+    {
+        _beeLvList[index] = value;
+        GameManager.Instance._saveManager.SaveBeeInfos(_beeLvList);
+    }
 
     /// <summary>
     /// 올라가 있는 포탑의 수를 체크하여 벌을 더 할 수 있는지?
@@ -97,7 +105,7 @@ public class UserSave
 
     public UserSave() { }
 
-    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerInform> towerInfos)
+    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerInform> towerInfos, List<int> beeInfos)
     {
         _userName = userName;
         _hasMoney = hasMoney;
@@ -111,6 +119,12 @@ public class UserSave
         if (_towerInformList == null)
         {
             _towerInformList = new List<TowerInform>();
+        }
+
+        _beeLvList = beeInfos;
+        if (_beeLvList == null)
+        {
+            _beeLvList = new List<int>();
         }
     }
 }

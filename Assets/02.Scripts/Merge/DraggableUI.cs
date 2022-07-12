@@ -55,14 +55,12 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
             if (mapInform != null)
             {
-
                 if (mapInform._isWay || GameManager.Instance._saveManager._userSave.IsCanBuildBee())
                 {
                     transform.SetParent(_previousParent);
                     _rect.position = _previousParent.GetComponentInParent<RectTransform>().position;
                     return;
                 }
-
 
                 // 자식이 두 개인가?
                 if (slot.childCount > 1)
@@ -72,10 +70,12 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
                     if (item_2._itemType == ItemType.BEE)
                     {
-                        // 벌이 배치됨
+                        // 포탑이 배치됨
+                        TowerInform towerInform = new TowerInform();
+                        //towerInform._itemInform = item_2;
+                        //GameManager.Instance._saveManager._userSave.AddTowerInfo(towerInform);
 
-
-
+                        //GameManager.Instance._saveManager._userSave.RemoveTowerInfo(item_1);
 
                         slot.GetChild(0).GetComponent<RectTransform>().position = _previousParent.GetComponentInParent<RectTransform>().position;
                         slot.GetChild(0).SetParent(_previousParent);
@@ -95,9 +95,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
                     if (item._itemType == ItemType.BEE)
                     {
-                        // 벌이 배치됨
+                        // 포탑이 배치됨
+                        TowerInform towerInform = new TowerInform();
+                        //towerInform._itemInform = item;
 
-
+                        //GameManager.Instance._saveManager._userSave.AddTowerInfo(towerInform);
                     }
                     else
                     {
@@ -119,7 +121,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                     {
                         if (item_1._itemType == ItemType.BEE)
                         {
-                            // 벌 변경
+                            // 포탑 변경
 
 
 

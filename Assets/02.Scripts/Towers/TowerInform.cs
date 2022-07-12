@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class TowerManager : MonoBehaviour
+public class TowerInform : MonoBehaviour
 {
-
-
+    public int _itemGrade;
 }

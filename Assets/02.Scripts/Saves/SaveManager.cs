@@ -13,7 +13,6 @@ public class SaveManager : MonoBehaviour
         LoadFronJson();
     }
 
-
     public void ResetSaveFile()
     {
         _userSave.ResetData();
@@ -34,7 +33,10 @@ public class SaveManager : MonoBehaviour
         var towerInfoJsonStr = PlayerPrefs.GetString("TowerInfoJsonStr", "");
         var towerInfos = JsonUtility.FromJson<List<TowerInform>>(towerInfoJsonStr);
 
-        _userSave = new UserSave(name, hasMoney, currentHoney, maxHoney, currentEgg, maxEgg, maxBeeCount, towerInfos);
+        var beeInfoJsonStr = PlayerPrefs.GetString("BeeInfoJsonStr", "");
+        var beeInfos = JsonUtility.FromJson<List<int>>(beeInfoJsonStr);
+
+        _userSave = new UserSave(name, hasMoney, currentHoney, maxHoney, currentEgg, maxEgg, maxBeeCount, towerInfos, beeInfos);
     }
 
     public void SaveUserName(string value)
@@ -69,5 +71,10 @@ public class SaveManager : MonoBehaviour
     {
         var jsonStr = JsonUtility.ToJson(value, false);
         PlayerPrefs.SetString("TowerInfoJsonStr", jsonStr);
+    }
+    public void SaveBeeInfos(List<int> value)
+    {
+        var jsonStr = JsonUtility.ToJson(value, false);
+        PlayerPrefs.SetString("BeeInfoJsonStr", jsonStr);
     }
 }
