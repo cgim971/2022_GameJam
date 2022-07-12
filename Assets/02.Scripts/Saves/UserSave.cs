@@ -5,27 +5,78 @@ using UnityEngine;
 [System.Serializable]
 public class UserSave
 {
-    // 유저의 이름
-    public string _userName;
+    public string USER_NAME
+    {
+        get => _userName;
+        set => GameManager.Instance._saveManager.SaveUserName(value);
+    }
+    public int USER_HASMONEY
+    {
+        get => _hasMoney;
+        set => GameManager.Instance._saveManager.SaveHasMoney(value);
+    }
+    public int USER_CURRENTHONEY
+    {
+        get => _currentHoney;
+        set => GameManager.Instance._saveManager.SaveCurrentHoney(value);
+    }
+    public int USER_MAXHONEY
+    {
+        get => _maxHoney;
+        set => GameManager.Instance._saveManager.SaveMaxHoney(value);
+    }
+    public int USER_CURRENTEGG
+    {
+        get => _currentEgg;
+        set => GameManager.Instance._saveManager.SaveCurrentEgg(value);
+    }
+    public int USER_MAXEGG
+    {
+        get => _maxEgg;
+        set => GameManager.Instance._saveManager.SaveMaxEgg(value);
+    }
+    public int USER_MAXBEECOUNT
+    {
+        get => _maxBeeCount;
+        set => GameManager.Instance._saveManager.SaveMaxBeeCount(value);
+    }
 
-    public long _hasMoney;
+    public void AddTowerInfo(TowerInform inform)
+    {
+        _towerInformList.Add(inform);
+        GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
+    }
+
+    public void RemoveTowerInfo(TowerInform inform)
+    {
+        _towerInformList.Remove(inform);
+        GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
+    }
+
+    // 유저의 이름
+    private string _userName;
+
+    private int _hasMoney;
 
     // 꿀 정보
-    public int _currentHoney;
-    public int _maxHoney;
+    private int _currentHoney;
+    private int _maxHoney;
 
     // 알 정보
-    public int _currentEgg;
-    public int _maxEgg;
+    private int _currentEgg;
+    private int _maxEgg;
 
-    public int _currentBee;
-    public int _maxBee;
+    private int _maxBeeCount;
 
-    public List<TowerInform> _towerInformList;
+    private List<TowerInform> _towerInformList;
 
-    public bool GetBeeCount()
+    /// <summary>
+    /// 올라가 있는 포탑의 수를 체크하여 벌을 더 할 수 있는지?
+    /// </summary>
+    /// <returns></returns>
+    public bool IsCanBuildBee()
     {
-        if(_currentBee < _maxBee)
+        if (_towerInformList.Count < _maxBeeCount)
         {
             return true;
         }
@@ -33,9 +84,20 @@ public class UserSave
         return false;
     }
 
+    public void ResetData()
+    {
+        USER_NAME = "";
+        USER_HASMONEY = 0;
+        USER_CURRENTHONEY = 0;
+        USER_MAXHONEY = 10;
+        USER_CURRENTEGG = 0;
+        USER_MAXEGG = 10;
+        USER_MAXBEECOUNT = 5;
+    }
+
     public UserSave() { }
 
-    public UserSave(string userName, long hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int currentBee, int maxBee)
+    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerInform> towerInfos)
     {
         _userName = userName;
         _hasMoney = hasMoney;
@@ -43,7 +105,12 @@ public class UserSave
         _maxHoney = maxHoney;
         _currentEgg = currentEgg;
         _maxEgg = maxEgg;
-        _currentBee = currentBee;
-        _maxBee = maxBee;   
+        _maxBeeCount = maxBee;
+
+        _towerInformList = towerInfos;
+        if (_towerInformList == null)
+        {
+            _towerInformList = new List<TowerInform>();
+        }
     }
 }

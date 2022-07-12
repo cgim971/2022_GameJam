@@ -56,7 +56,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             if (mapInform != null)
             {
 
-                if (mapInform._isWay || GameManager.Instance._saveManager._userSave.GetBeeCount())
+                if (mapInform._isWay || GameManager.Instance._saveManager._userSave.IsCanBuildBee())
                 {
                     transform.SetParent(_previousParent);
                     _rect.position = _previousParent.GetComponentInParent<RectTransform>().position;
