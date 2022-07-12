@@ -17,10 +17,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         _saveManager = FindObjectOfType<SaveManager>();
         _stageManager = FindObjectOfType<StageManager>();
-    }
 
-    private void Start()
-    {
         for (int i = 0; i < 40; i++)
         {
             GameObject obj = Instantiate(_map, _midPanel);
@@ -28,5 +25,10 @@ public class GameManager : MonoSingleton<GameManager>
 
             _mapList.Add(obj.GetComponent<MapInform>());
         }
+    }
+
+    private void Start()
+    {
+        
     }
 }

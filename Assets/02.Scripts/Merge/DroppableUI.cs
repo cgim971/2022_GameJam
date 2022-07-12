@@ -6,9 +6,11 @@ using UnityEngine.EventSystems;
 
 public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
-
     private Image _image;
     private RectTransform _rect;
+
+    public Color _afterColor;
+    public Color _beforeColor;
 
     private void Awake()
     {
@@ -27,11 +29,11 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _image.color = Color.yellow;
+        _image.color = _beforeColor;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _image.color = Color.white;
+        _image.color = _afterColor;
     }
 }

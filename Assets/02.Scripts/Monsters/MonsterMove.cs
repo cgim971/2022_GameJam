@@ -18,6 +18,7 @@ public class MonsterMove : MonoBehaviour
     public void Start()
     {
         _mapList = GameManager.Instance._mapList;
+
         _mainCam = Camera.main;
         Vector2 pos = _mainCam.ScreenToWorldPoint(_mapList[_stageInform._stageNumbers[_index++]].transform.position);
 

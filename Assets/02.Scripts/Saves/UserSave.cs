@@ -21,7 +21,9 @@ public class UserSave
     public int _currentBee;
     public int _maxBee;
 
-    public bool GetBee()
+    public List<TowerInform> _towerInformList;
+
+    public bool GetBeeCount()
     {
         if(_currentBee < _maxBee)
         {
