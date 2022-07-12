@@ -48,6 +48,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
         else
         {
+            if (_previousParent.GetComponent<MapInform>())
+            {
+                GameManager.Instance._saveManager._userSave.RemoveTowerInfo(this.GetComponent<TowerInform>());
+            }
+
             Transform slot = eventData.pointerDrag.transform.parent;
 
             // 맵인가용?
@@ -55,7 +60,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
             if (mapInform != null)
             {
-                if (mapInform._isWay || GameManager.Instance._saveManager._userSave.IsCanBuildBee())
+                if (mapInform._isWay || !GameManager.Instance._saveManager._userSave.IsCanBuildBee())
                 {
                     transform.SetParent(_previousParent);
                     _rect.position = _previousParent.GetComponentInParent<RectTransform>().position;
@@ -71,11 +76,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                     if (item_2._itemType == ItemType.BEE)
                     {
                         // 포탑이 배치됨
-                        TowerInform towerInform = new TowerInform();
-                        //towerInform._itemInform = item_2;
-                        //GameManager.Instance._saveManager._userSave.AddTowerInfo(towerInform);
-
-                        //GameManager.Instance._saveManager._userSave.RemoveTowerInfo(item_1);
+                        GameManager.Instance._saveManager._userSave.AddTowerInfo(item_2.GetComponent<TowerInform>());
 
                         slot.GetChild(0).GetComponent<RectTransform>().position = _previousParent.GetComponentInParent<RectTransform>().position;
                         slot.GetChild(0).SetParent(_previousParent);
@@ -96,10 +97,8 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                     if (item._itemType == ItemType.BEE)
                     {
                         // 포탑이 배치됨
-                        TowerInform towerInform = new TowerInform();
-                        //towerInform._itemInform = item;
+                        GameManager.Instance._saveManager._userSave.AddTowerInfo(item.GetComponent<TowerInform>());
 
-                        //GameManager.Instance._saveManager._userSave.AddTowerInfo(towerInform);
                     }
                     else
                     {
@@ -122,9 +121,8 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                         if (item_1._itemType == ItemType.BEE)
                         {
                             // 포탑 변경
-
-
-
+                            GameManager.Instance._saveManager._userSave.RemoveTowerInfo(item_1.GetComponent<TowerInform>());
+                            GameManager.Instance._saveManager._userSave.AddTowerInfo(item_2.GetComponent<TowerInform>());
 
                             slot.GetChild(0).GetComponent<RectTransform>().position = _previousParent.GetComponentInParent<RectTransform>().position;
                             slot.GetChild(0).SetParent(_previousParent);
@@ -160,16 +158,19 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                         return;
                     }
 
-                    // 아이템의 타입이 같은지
-                    if (item_1._itemType == item_2._itemType)
+                    if (item_1._itemType != ItemType.BEE || item_2._itemType != ItemType.BEE)
                     {
-                        // 아이템이 등급도 같다면
-                        if (item_1._itemGrade == item_2._itemGrade)
+                        // 아이템의 타입이 같은지
+                        if (item_1._itemType == item_2._itemType)
                         {
-                            // 아이템 한 개 없애고 하나를 다음 레벨로
-                            item_1._itemGrade++;
-                            Destroy(item_2.gameObject);
-                            return;
+                            // 아이템이 등급도 같다면
+                            if (item_1._itemGrade == item_2._itemGrade)
+                            {
+                                // 아이템 한 개 없애고 하나를 다음 레벨로
+                                item_1._itemGrade++;
+                                Destroy(item_2.gameObject);
+                                return;
+                            }
                         }
                     }
 

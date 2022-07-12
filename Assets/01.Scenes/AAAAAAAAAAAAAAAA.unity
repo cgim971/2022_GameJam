@@ -4241,11 +4241,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7541347906836154797, guid: 475c5332983d65e42b76e919cbe1ef16, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 0.6084906
       objectReference: {fileID: 0}
     - target: {fileID: 7541347906836154797, guid: 475c5332983d65e42b76e919cbe1ef16, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.6084906
       objectReference: {fileID: 0}
     - target: {fileID: 7541347906836154797, guid: 475c5332983d65e42b76e919cbe1ef16, type: 3}
       propertyPath: m_Color.r
@@ -4983,6 +4983,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b199eae506945a4fbb88eeac23f7ace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _userSave:
+    _userName: 
+    _hasMoney: 0
+    _currentHoney: 0
+    _maxHoney: 0
+    _currentEgg: 0
+    _maxEgg: 0
+    _maxBeeCount: 0
+    _towerInformList: []
+    _beeLvList: 
+    _shopItemLvList: 
 --- !u!224 &1653081516 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5559549976839851564, guid: e61ca3b232bea0442848c82922d053a2, type: 3}

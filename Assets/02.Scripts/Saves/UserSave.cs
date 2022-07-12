@@ -41,24 +41,22 @@ public class UserSave
         set => GameManager.Instance._saveManager.SaveMaxBeeCount(value);
     }
 
-
-
     // 유저의 이름
-    private string _userName;
+    [SerializeField] private string _userName;
 
-    private int _hasMoney;
+    [SerializeField] private int _hasMoney;
 
     // 꿀 정보
-    private int _currentHoney;
-    private int _maxHoney;
+    [SerializeField] private int _currentHoney;
+    [SerializeField] private int _maxHoney;
 
     // 알 정보
-    private int _currentEgg;
-    private int _maxEgg;
+    [SerializeField] private int _currentEgg;
+    [SerializeField] private int _maxEgg;
 
-    private int _maxBeeCount;
+    [SerializeField] private int _maxBeeCount;
 
-    private List<TowerInform> _towerInformList = new List<TowerInform>();
+    [SerializeField] private List<TowerInform> _towerInformList = new List<TowerInform>();
     public void AddTowerInfo(TowerInform inform)
     {
         _towerInformList.Add(inform);
@@ -71,11 +69,19 @@ public class UserSave
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
     }
 
-    private List<int> _beeLvList = new List<int>();
+    [SerializeField] private List<int> _beeLvList = new List<int>();
     public void ChangeBeeInfo(int index, int value)
     {
         _beeLvList[index] = value;
         GameManager.Instance._saveManager.SaveBeeInfos(_beeLvList);
+    }
+
+    [SerializeField] private List<int> _shopItemLvList = new List<int>();
+
+    public void ChangeShopItemInfo(int index, int value)
+    {
+        _shopItemLvList[index] = value;
+        GameManager.Instance._saveManager.SaveShopItemInfos(_shopItemLvList);
     }
 
     /// <summary>
@@ -101,11 +107,24 @@ public class UserSave
         USER_CURRENTEGG = 0;
         USER_MAXEGG = 10;
         USER_MAXBEECOUNT = 5;
+
+        _towerInformList.Clear();
+
+        for (int i = 0; i < _beeLvList.Count; i++)
+        {
+            _beeLvList[i] = 0;
+        }
+
+        for (int i = 0; i < _shopItemLvList.Count; i++)
+        {
+            _shopItemLvList[i] = 0;
+        }
+
     }
 
     public UserSave() { }
 
-    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerInform> towerInfos, List<int> beeInfos)
+    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerInform> towerInfos, List<int> beeInfos, List<int> shopItemInfos)
     {
         _userName = userName;
         _hasMoney = hasMoney;
@@ -125,6 +144,12 @@ public class UserSave
         if (_beeLvList == null)
         {
             _beeLvList = new List<int>();
+        }
+
+        _shopItemLvList = shopItemInfos;
+        if (_shopItemLvList == null)
+        {
+            _shopItemLvList = new List<int>();
         }
     }
 }
