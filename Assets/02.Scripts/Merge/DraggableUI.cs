@@ -30,7 +30,10 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnDrag(PointerEventData eventData)
     {
-        _rect.position = eventData.position;
+        Vector3 pos = eventData.position;
+        pos.z = 0;
+
+        _rect.position = pos;
     }
 
     public void OnEndDrag(PointerEventData eventData)
