@@ -13,14 +13,6 @@ public class SaveManager : MonoBehaviour
         LoadFronJson();
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            ResetSaveFile();
-        }
-    }
-
     public void ResetSaveFile()
     {
         _userSave.ResetData();
@@ -30,21 +22,21 @@ public class SaveManager : MonoBehaviour
 
     private void LoadFronJson()
     {
-        var name = PlayerPrefs.GetString("UserName", "");
-        var hasMoney = PlayerPrefs.GetInt("HasMoney", 0);
-        var currentHoney = PlayerPrefs.GetInt("CurrentHoney", 0);
-        var maxHoney = PlayerPrefs.GetInt("MaxHoney", 0);
-        var currentEgg = PlayerPrefs.GetInt("CurrentEgg", 0);
-        var maxEgg = PlayerPrefs.GetInt("MaxEgg", 0);
-        var maxBeeCount = PlayerPrefs.GetInt("MaxBeeCount", 0);
+        string name = PlayerPrefs.GetString("UserName", "");
+        int hasMoney = PlayerPrefs.GetInt("HasMoney", 0);
+        int currentHoney = PlayerPrefs.GetInt("CurrentHoney", 0);
+        int maxHoney = PlayerPrefs.GetInt("MaxHoney", 0);
+        int currentEgg = PlayerPrefs.GetInt("CurrentEgg", 0);
+        int maxEgg = PlayerPrefs.GetInt("MaxEgg", 0);
+        int maxBeeCount = PlayerPrefs.GetInt("MaxBeeCount", 0);
 
-        var towerInfoJsonStr = PlayerPrefs.GetString("TowerInfoJsonStr", "");
+        string towerInfoJsonStr = PlayerPrefs.GetString("TowerInfoJsonStr", "");
         var towerInfos = JsonUtility.FromJson<List<TowerInform>>(towerInfoJsonStr);
 
-        var beeInfoJsonStr = PlayerPrefs.GetString("BeeInfoJsonStr", "");
+        string beeInfoJsonStr = PlayerPrefs.GetString("BeeInfoJsonStr", "");
         var beeInfos = JsonUtility.FromJson<List<int>>(beeInfoJsonStr);
 
-        var shopItemInfoJsonStr = PlayerPrefs.GetString("ShopItemJsonStr", "");
+        string shopItemInfoJsonStr = PlayerPrefs.GetString("ShopItemJsonStr", "");
         var shopItemInfos = JsonUtility.FromJson<List<int>>(shopItemInfoJsonStr);
 
         _userSave = new UserSave(name, hasMoney, currentHoney, maxHoney, currentEgg, maxEgg, maxBeeCount, towerInfos, beeInfos, shopItemInfos);
@@ -80,6 +72,7 @@ public class SaveManager : MonoBehaviour
     }
     public void SaveTowerInfos(List<TowerInform> value)
     {
+        // 저장이 제대로 안 됨 {}으로 되고 있음 그래서 포탑의 정보 등이 안 됨
         var jsonStr = JsonUtility.ToJson(value, false);
         PlayerPrefs.SetString("TowerInfoJsonStr", jsonStr);
     }

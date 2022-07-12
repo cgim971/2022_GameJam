@@ -8,37 +8,65 @@ public class UserSave
     public string USER_NAME
     {
         get => _userName;
-        set => GameManager.Instance._saveManager.SaveUserName(value);
+        set
+        {
+            _userName = value;
+            GameManager.Instance._saveManager.SaveUserName(_userName);
+        }
     }
     public int USER_HASMONEY
     {
         get => _hasMoney;
-        set => GameManager.Instance._saveManager.SaveHasMoney(value);
+        set
+        {
+            _hasMoney = value;
+            GameManager.Instance._saveManager.SaveHasMoney(_hasMoney);
+        }
     }
     public int USER_CURRENTHONEY
     {
         get => _currentHoney;
-        set => GameManager.Instance._saveManager.SaveCurrentHoney(value);
+        set
+        {
+            _currentHoney = value;
+            GameManager.Instance._saveManager.SaveCurrentHoney(_currentHoney);
+        }
     }
     public int USER_MAXHONEY
     {
         get => _maxHoney;
-        set => GameManager.Instance._saveManager.SaveMaxHoney(value);
+        set
+        {
+            _maxHoney = value;
+            GameManager.Instance._saveManager.SaveMaxHoney(_maxHoney);
+        }
     }
     public int USER_CURRENTEGG
     {
         get => _currentEgg;
-        set => GameManager.Instance._saveManager.SaveCurrentEgg(value);
+        set
+        {
+            _currentEgg = value;
+            GameManager.Instance._saveManager.SaveCurrentEgg(_currentEgg);
+        }
     }
     public int USER_MAXEGG
     {
         get => _maxEgg;
-        set => GameManager.Instance._saveManager.SaveMaxEgg(value);
+        set
+        {
+            _maxEgg = value;
+            GameManager.Instance._saveManager.SaveMaxEgg(_maxEgg);
+        }
     }
     public int USER_MAXBEECOUNT
     {
         get => _maxBeeCount;
-        set => GameManager.Instance._saveManager.SaveMaxBeeCount(value);
+        set
+        {
+            _maxBeeCount = value;
+            GameManager.Instance._saveManager.SaveMaxBeeCount(_maxBeeCount);
+        }
     }
 
     // 유저의 이름
@@ -60,14 +88,24 @@ public class UserSave
     public void AddTowerInfo(TowerInform inform)
     {
         _towerInformList.Add(inform);
+        CreateTower(inform);
+
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
     }
 
     public void RemoveTowerInfo(TowerInform inform)
     {
         _towerInformList.Remove(inform);
+
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
     }
+
+    public void CreateTower(TowerInform inform)
+    {
+        int towerIndex = inform.transform.parent.GetComponent<MapInform>()._mapNumber;
+        GameManager.Instance._towerManager.CreateTower(towerIndex);
+    }
+
 
     [SerializeField] private List<int> _beeLvList = new List<int>();
     public void ChangeBeeInfo(int index, int value)
@@ -90,10 +128,7 @@ public class UserSave
     /// <returns></returns>
     public bool IsCanBuildBee()
     {
-        if (_towerInformList.Count < _maxBeeCount)
-        {
-            return true;
-        }
+        if (_towerInformList.Count < _maxBeeCount) return true;
 
         return false;
     }
@@ -119,7 +154,6 @@ public class UserSave
         {
             _shopItemLvList[i] = 0;
         }
-
     }
 
     public UserSave() { }
@@ -151,5 +185,12 @@ public class UserSave
         {
             _shopItemLvList = new List<int>();
         }
+
+        for (int i = 0; i < _towerInformList.Count; i++)
+        {
+            //CreateTower(i);
+        }
     }
+
+
 }

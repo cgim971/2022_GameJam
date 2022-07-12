@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class TowerInform : MonoBehaviour
 {
-    public int _itemGrade;
+    public int _slotNumber;
 }

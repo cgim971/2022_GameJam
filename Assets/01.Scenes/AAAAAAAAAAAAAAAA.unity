@@ -1615,6 +1615,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6c55ad9e47f054f91b20759f281a80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tower: {fileID: 1806172794670110030, guid: 6a1ed27f3c35a614ea45d9305769612c, type: 3}
+  _parent: {fileID: 567170427}
+  _mainCam: {fileID: 0}
+  _mapList: []
 --- !u!224 &551666899 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5559549976839851564, guid: e61ca3b232bea0442848c82922d053a2, type: 3}
