@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class TowerInform : MonoBehaviour
+public class TowerData 
 {
-    public TowerData towerData;
+    public int _slotNumber;
+    public int _itemGrade;
 }

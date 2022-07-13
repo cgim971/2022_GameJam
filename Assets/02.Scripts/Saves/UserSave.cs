@@ -85,34 +85,43 @@ public class UserSave
     [SerializeField] private int _maxBeeCount;
 
 
-    [SerializeField] private List<TowerInform> _towerInformList = new List<TowerInform>();
+    [SerializeField] private List<TowerData> _towerInformList = new List<TowerData>();
     public void AddTowerInfo(TowerInform inform)
     {
-        _towerInformList.Add(inform);
-        CreateTower(inform);
+        TowerData towerData = inform.towerData;
+        _towerInformList.Add(towerData);
+        Debug.Log(towerData);
+        Debug.Log(inform.transform.parent.GetComponent<MapInform>()._mapNumber);
+        CreateTower(towerData, inform.transform.parent.GetComponent<MapInform>()._mapNumber);
 
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
     }
 
     public void RemoveTowerInfo(TowerInform inform)
     {
-        _towerInformList.Remove(inform);
+        TowerData towerData = inform.towerData;
+        _towerInformList.Remove(towerData);
 
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
 
         // 타워 삭제 
-        RemoveTower(inform);
+        RemoveTower(towerData);
     }
     public Dictionary<int, GameObject> _towerDictionary = new Dictionary<int, GameObject>();
-    public void CreateTower(TowerInform inform)
+    public void CreateTower(TowerData inform, int index)
     {
-        int towerIndex = inform.transform.parent.GetComponent<MapInform>()._mapNumber;
+        inform._slotNumber = index;
+        int towerIndex = inform._slotNumber;
         GameObject obj = GameManager.Instance._towerManager.CreateTower(towerIndex);
-        inform._slotNumber = towerIndex;
         _towerDictionary.Add(towerIndex, obj);
     }
-
-    public void RemoveTower(TowerInform inform)
+    public void CreateTower(TowerData inform)
+    {
+        int towerIndex = inform._slotNumber;
+        GameObject obj = GameManager.Instance._towerManager.CreateTower(towerIndex);
+        _towerDictionary.Add(towerIndex, obj);
+    }
+    public void RemoveTower(TowerData inform)
     {
         int towerIndex = inform._slotNumber;
         GameObject tower = null;
@@ -140,13 +149,6 @@ public class UserSave
         _shopItemLvList[index] = value;
         GameManager.Instance._saveManager.SaveShopItemInfos(_shopItemLvList);
     }
-
-    [SerializeField] private List<bool> _isGetBeeList = new List<bool>();
-    public void ChangeGetBee(int index, bool value)
-    {
-        _isGetBeeList[index] = value;
-    }
-
 
     /// <summary>
     /// 올라가 있는 포탑의 수를 체크하여 벌을 더 할 수 있는지?
@@ -184,7 +186,7 @@ public class UserSave
 
     public UserSave() { }
 
-    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerInform> towerInfos, List<int> beeInfos, List<int> shopItemInfos, List<bool> getBeeInfos)
+    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerData> towerInfos, List<int> beeInfos, List<int> shopItemInfos)
     {
         _userName = userName;
         _hasMoney = hasMoney;
@@ -197,15 +199,13 @@ public class UserSave
         _towerInformList = towerInfos;
         if (_towerInformList == null)
         {
-            _towerInformList = new List<TowerInform>();
+            _towerInformList = new List<TowerData>();
         }
         else
         {
             // 타워 초기 생성
             for (int i = 0; i < _towerInformList.Count; i++)
-            {
                 CreateTower(_towerInformList[i]);
-            }
         }
 
         _beeLvList = beeInfos;
@@ -219,13 +219,6 @@ public class UserSave
         {
             _shopItemLvList = new List<int>();
         }
-
-        _isGetBeeList = getBeeInfos;
-        if (_isGetBeeList == null)
-        {
-            _isGetBeeList = new List<bool>();
-        }
-
 
     }
 

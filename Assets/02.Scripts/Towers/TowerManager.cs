@@ -11,7 +11,7 @@ public class TowerManager : MonoBehaviour
 
     public List<MapInform> _mapList;
 
-    private void Start()
+    private void Awake()
     {
         _mainCam = Camera.main;
 
@@ -24,8 +24,16 @@ public class TowerManager : MonoBehaviour
         Vector3 towerPos = _mainCam.ScreenToWorldPoint(_mapList[index].transform.position);
         towerPos.z = 0;
         newTower.transform.position = towerPos;
-
+        newTower.GetComponent<TowerInform>().towerData._slotNumber = index;
         return newTower;
+    }
+
+    public void RefreshTowerPos(GameObject tower, int index)
+    {
+        Vector3 towerPos = _mainCam.ScreenToWorldPoint(_mapList[index].transform.position);
+        towerPos.z = 0;
+
+        tower.transform.position = towerPos;
     }
 
     public void RemoveTower(GameObject tower)
