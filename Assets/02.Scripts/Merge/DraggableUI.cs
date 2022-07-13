@@ -98,7 +98,6 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                     {
                         // 포탑이 배치됨
                         GameManager.Instance._saveManager._userSave.AddTowerInfo(item.GetComponent<TowerInform>());
-
                     }
                     else
                     {
@@ -121,7 +120,6 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                         if (item_1._itemType == ItemType.BEE)
                         {
                             // 포탑 변경
-
                             GameManager.Instance._saveManager._userSave.RemoveTowerInfo(item_1.GetComponent<TowerInform>());
                             GameManager.Instance._saveManager._userSave.AddTowerInfo(item_2.GetComponent<TowerInform>());
 

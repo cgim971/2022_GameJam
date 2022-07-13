@@ -4998,6 +4998,7 @@ MonoBehaviour:
     _towerInformList: []
     _beeLvList: 
     _shopItemLvList: 
+    _isGetBeeList: 
 --- !u!224 &1653081516 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5559549976839851564, guid: e61ca3b232bea0442848c82922d053a2, type: 3}
