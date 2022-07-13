@@ -39,7 +39,10 @@ public class SaveManager : MonoBehaviour
         string shopItemInfoJsonStr = PlayerPrefs.GetString("ShopItemJsonStr", "");
         var shopItemInfos = JsonUtility.FromJson<List<int>>(shopItemInfoJsonStr);
 
-        _userSave = new UserSave(name, hasMoney, currentHoney, maxHoney, currentEgg, maxEgg, maxBeeCount, towerInfos, beeInfos, shopItemInfos);
+        string getBeeInfoJsonStr = PlayerPrefs.GetString("GetBeeJsonStr", "");
+        var getBeeInfos = JsonUtility.FromJson<List<bool>>(getBeeInfoJsonStr);
+
+        _userSave = new UserSave(name, hasMoney, currentHoney, maxHoney, currentEgg, maxEgg, maxBeeCount, towerInfos, beeInfos, shopItemInfos, getBeeInfos);
     }
 
     public void SaveUserName(string value)
@@ -86,4 +89,10 @@ public class SaveManager : MonoBehaviour
         var jsonStr = JsonUtility.ToJson(value, false);
         PlayerPrefs.SetString("ShopItemJsonStr", jsonStr);
     }
+    public void SaveGetBeeInfos(List<bool> value)
+    {
+        var jsonStr = JsonUtility.ToJson(value, false);
+        PlayerPrefs.SetString("GetBeeJsonStr", jsonStr);
+    }
+
 }

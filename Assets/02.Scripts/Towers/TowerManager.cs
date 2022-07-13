@@ -10,6 +10,7 @@ public class TowerManager : MonoBehaviour
     public Camera _mainCam;
 
     public List<MapInform> _mapList;
+
     private void Start()
     {
         _mainCam = Camera.main;
@@ -17,16 +18,18 @@ public class TowerManager : MonoBehaviour
         _mapList = GameManager.Instance._mapList;
     }
 
-    public void CreateTower(int index)
+    public GameObject CreateTower(int index)
     {
         GameObject newTower = Instantiate(_tower, _parent);
         Vector3 towerPos = _mainCam.ScreenToWorldPoint(_mapList[index].transform.position);
         towerPos.z = 0;
         newTower.transform.position = towerPos;
+
+        return newTower;
     }
 
-    public void RemoveTower(GameObject obj)
+    public void RemoveTower(GameObject tower)
     {
-        Destroy(obj);
+        Destroy(tower);
     }
 }
