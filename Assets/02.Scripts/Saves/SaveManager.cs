@@ -50,7 +50,7 @@ public class SaveManager : MonoBehaviour
         int maxBeeCount = PlayerPrefs.GetInt("MaxBeeCount", 0);
 
         string towerInfoJsonStr = PlayerPrefs.GetString("TowerInfoJsonStr", "");
-        var towerInfos = JsonConvert.DeserializeObject<List<TowerData>>(towerInfoJsonStr);
+        var towerInfos = JsonConvert.DeserializeObject<List<ItemData>>(towerInfoJsonStr);
 
         string itemInfoJsonStr = PlayerPrefs.GetString("ItemInfoJsonStr", "");
         var itemInfos = JsonConvert.DeserializeObject<List<ItemData>>(itemInfoJsonStr);
@@ -96,7 +96,7 @@ public class SaveManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("MaxBeeCount", value);
     }
-    public void SaveTowerInfos(List<TowerData> value)
+    public void SaveTowerInfos(List<ItemData> value)
     {
         var jsonStr = JsonConvert.SerializeObject(value);
         PlayerPrefs.SetString("TowerInfoJsonStr", jsonStr);

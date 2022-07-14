@@ -18,10 +18,14 @@ public class TowerManager : MonoBehaviour
 
         _mapList = GameManager.Instance._mapList;
     }
-    public void RefreshTower(ItemInform inform)
+    public void RefreshTower(ItemData itemData)
     {
-        GameObject newTower = Instantiate(_item, _mapList[inform._itemData._slotNumber].transform);
-        newTower.GetComponent<ItemInform>().SetItemInform(inform);
+        GameObject newTower = Instantiate(_item, _mapList[itemData._slotNumber].transform);
+        var inform = newTower.GetComponent<ItemInform>();
+        inform._itemName = "";
+        inform._itemData = itemData;
+        var towerInform = newTower.GetComponent<TowerInform>();
+        towerInform.towerData = itemData;
     }
     public GameObject CreateTower(int index)
     {

@@ -95,10 +95,10 @@ public class UserSave
     [SerializeField] private int _maxBeeCount;
 
 
-    [SerializeField] private List<TowerData> _towerInformList = new List<TowerData>();
+    [SerializeField] private List<ItemData> _towerInformList = new List<ItemData>();
     public void AddTowerInfo(TowerInform inform)
     {
-        TowerData towerData = inform.towerData;
+        ItemData towerData = inform.towerData;
         _towerInformList.Add(towerData);
         CreateTower(towerData, inform.transform.parent.GetComponent<MapInform>()._mapNumber);
 
@@ -106,38 +106,37 @@ public class UserSave
     }
     public void RemoveTowerInfo(TowerInform inform)
     {
-        TowerData towerData = inform.towerData;
+        ItemData towerData = inform.towerData;
         _towerInformList.Remove(towerData);
 
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
 
         RemoveTower(towerData);
     }
-    public void RefreshTowerInfo(TowerData inform)
+    public void RefreshTowerInfo(ItemData inform)
     {
-        ItemInform item = new ItemInform
-        {
-            _itemName = "",
-            _itemData = new ItemData
-            {
-                _itemType = ItemType.BEE,
-                _itemGrade = inform._itemGrade,
-                _slotNumber = inform._slotNumber
-            }
-        };
+        //ItemInform item = new ItemInform();
+        //item._itemName = "";
+        //item._itemData = inform;
 
-        GameManager.Instance._towerManager.RefreshTower(item);
+        //ItemInform item = new ItemInform
+        //{
+        //    _itemName = "",
+        //    _itemData = inform
+        //};
+
+        GameManager.Instance._towerManager.RefreshTower(inform);
         CreateTower(inform, inform._slotNumber);
     }
     public Dictionary<int, GameObject> _towerDictionary = new Dictionary<int, GameObject>();
-    public void CreateTower(TowerData inform, int index)
+    public void CreateTower(ItemData inform, int index)
     {
         inform._slotNumber = index;
         int towerIndex = inform._slotNumber;
         GameObject obj = GameManager.Instance._towerManager.CreateTower(towerIndex);
         _towerDictionary.Add(towerIndex, obj);
     }
-    public void RemoveTower(TowerData inform)
+    public void RemoveTower(ItemData inform)
     {
         int towerIndex = inform._slotNumber;
         GameObject tower = null;
@@ -163,7 +162,6 @@ public class UserSave
         ItemData itemData = inform._itemData;
         _itemInformList.Remove(itemData);
 
-        RemoveItem(itemData);
         GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
     }
     public void RefreshItemInfo(ItemData inform)
@@ -171,23 +169,14 @@ public class UserSave
         ItemInform item = new ItemInform
         {
             _itemName = "",
-            _itemData = new ItemData
-            {
-                _itemType = inform._itemType,
-                _itemGrade = inform._itemGrade,
-                _slotNumber = inform._slotNumber
-            },
+            _itemData = inform,
         };
 
         CreateItem(item);
     }
-    public Dictionary<int, GameObject> _itemDictionary = new Dictionary<int, GameObject>();
-    public void CreateItem(ItemInform inform, int index)
+    public void RefreshItemInfo(ItemInform inform)
     {
-        GameObject obj = GameManager.Instance._itemManager.CreateItem(index);
-        obj.GetComponent<ItemInform>().SetItemInform(inform);
-        _itemDictionary.Add(index, obj);
-
+        _itemInformList.Add(inform._itemData);
         GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
     }
     public void CreateItem(ItemInform inform)
@@ -195,25 +184,15 @@ public class UserSave
         int itemIndex = inform._itemData._slotNumber;
         GameObject obj = GameManager.Instance._itemManager.CreateItem(itemIndex);
         obj.GetComponent<ItemInform>().SetItemInform(inform);
-        _itemDictionary.Add(itemIndex, obj);
 
         GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
     }
-    public void RelocateItem(int slotNumber, GameObject obj)
-    {
-        _itemDictionary.Add(slotNumber, obj);
-        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
-    }
-    public void RemoveItem(ItemData inform)
-    {
-        int itemIndex = inform._slotNumber;
-        GameObject item = null;
-        _itemDictionary.TryGetValue(itemIndex, out item);
 
-        if (item != null)
-        {
-            _itemDictionary.Remove(itemIndex);
-        }
+    public void DeleteItem(GameObject obj)
+    {
+        _itemInformList.Remove(obj.GetComponent<ItemInform>()._itemData);
+        MonoBehaviour.Destroy(obj);
+        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
     }
 
 
@@ -269,7 +248,7 @@ public class UserSave
 
         _towerInformList.Clear();
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
-        
+
         _itemInformList.Clear();
         GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
 
@@ -290,7 +269,7 @@ public class UserSave
 
     public UserSave() { }
 
-    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerData> towerInfos, List<ItemData> itemInfos, List<int> beeInfos, List<int> shopItemInfos)
+    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<ItemData> towerInfos, List<ItemData> itemInfos, List<int> beeInfos, List<int> shopItemInfos)
     {
         _userName = userName;
         _hasMoney = hasMoney;
@@ -303,7 +282,7 @@ public class UserSave
         _towerInformList = towerInfos;
         if (_towerInformList == null)
         {
-            _towerInformList = new List<TowerData>();
+            _towerInformList = new List<ItemData>();
         }
         else
         {
@@ -319,7 +298,6 @@ public class UserSave
         }
         else
         {
-            Debug.Log(_itemInformList.Count);
             // 아이템 초기 생성
             for (int i = 0; i < _itemInformList.Count; i++)
                 RefreshItemInfo(_itemInformList[i]);

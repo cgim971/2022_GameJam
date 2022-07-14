@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public class TowerInform : MonoBehaviour
 {
-    public TowerData towerData;
+    public ItemData towerData;
 }
