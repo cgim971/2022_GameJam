@@ -6,6 +6,7 @@ using UnityEngine;
 public class TowerManager : MonoBehaviour
 {
     public GameObject _tower;
+    public GameObject _item;
     public Transform _parent;
     public Camera _mainCam;
 
@@ -17,7 +18,11 @@ public class TowerManager : MonoBehaviour
 
         _mapList = GameManager.Instance._mapList;
     }
-
+    public void RefreshTower(ItemInform inform)
+    {
+        GameObject newTower = Instantiate(_item, _mapList[inform._itemData._slotNumber].transform);
+        newTower.GetComponent<ItemInform>().SetItemInform(inform);
+    }
     public GameObject CreateTower(int index)
     {
         GameObject newTower = Instantiate(_tower, _parent);
@@ -26,14 +31,6 @@ public class TowerManager : MonoBehaviour
         newTower.transform.position = towerPos;
         newTower.GetComponent<TowerInform>().towerData._slotNumber = index;
         return newTower;
-    }
-
-    public void RefreshTowerPos(GameObject tower, int index)
-    {
-        Vector3 towerPos = _mainCam.ScreenToWorldPoint(_mapList[index].transform.position);
-        towerPos.z = 0;
-
-        tower.transform.position = towerPos;
     }
 
     public void RemoveTower(GameObject tower)

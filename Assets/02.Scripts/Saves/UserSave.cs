@@ -23,6 +23,15 @@ public class UserSave
             GameManager.Instance._saveManager.SaveHasMoney(_hasMoney);
         }
     }
+    public int USER_HASROYALJELLY
+    {
+        get => _hasRoyalJelly;
+        set
+        {
+            _hasRoyalJelly = value;
+            GameManager.Instance._saveManager.SaveHasMoney(_hasRoyalJelly);
+        }
+    }
     public int USER_CURRENTHONEY
     {
         get => _currentHoney;
@@ -73,6 +82,7 @@ public class UserSave
     [SerializeField] private string _userName;
 
     [SerializeField] private int _hasMoney;
+    [SerializeField] private int _hasRoyalJelly;
 
     // 꿀 정보
     [SerializeField] private int _currentHoney;
@@ -90,13 +100,10 @@ public class UserSave
     {
         TowerData towerData = inform.towerData;
         _towerInformList.Add(towerData);
-        Debug.Log(towerData);
-        Debug.Log(inform.transform.parent.GetComponent<MapInform>()._mapNumber);
         CreateTower(towerData, inform.transform.parent.GetComponent<MapInform>()._mapNumber);
 
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
     }
-
     public void RemoveTowerInfo(TowerInform inform)
     {
         TowerData towerData = inform.towerData;
@@ -104,8 +111,23 @@ public class UserSave
 
         GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
 
-        // 타워 삭제 
         RemoveTower(towerData);
+    }
+    public void RefreshTowerInfo(TowerData inform)
+    {
+        ItemInform item = new ItemInform
+        {
+            _itemName = "",
+            _itemData = new ItemData
+            {
+                _itemType = ItemType.BEE,
+                _itemGrade = inform._itemGrade,
+                _slotNumber = inform._slotNumber
+            }
+        };
+
+        GameManager.Instance._towerManager.RefreshTower(item);
+        CreateTower(inform, inform._slotNumber);
     }
     public Dictionary<int, GameObject> _towerDictionary = new Dictionary<int, GameObject>();
     public void CreateTower(TowerData inform, int index)
@@ -115,22 +137,82 @@ public class UserSave
         GameObject obj = GameManager.Instance._towerManager.CreateTower(towerIndex);
         _towerDictionary.Add(towerIndex, obj);
     }
-    public void CreateTower(TowerData inform)
-    {
-        int towerIndex = inform._slotNumber;
-        GameObject obj = GameManager.Instance._towerManager.CreateTower(towerIndex);
-        _towerDictionary.Add(towerIndex, obj);
-    }
     public void RemoveTower(TowerData inform)
     {
         int towerIndex = inform._slotNumber;
         GameObject tower = null;
         _towerDictionary.TryGetValue(towerIndex, out tower);
-
         if (tower != null)
         {
             GameManager.Instance._towerManager.RemoveTower(tower);
             _towerDictionary.Remove(towerIndex);
+        }
+    }
+
+    [SerializeField] private List<ItemData> _itemInformList = new List<ItemData>();
+    public void AddItemInfo(ItemInform inform)
+    {
+        ItemData itemData = inform._itemData;
+        _itemInformList.Add(itemData);
+
+        CreateItem(inform);
+        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
+    }
+    public void RemoveItemInfo(ItemInform inform)
+    {
+        ItemData itemData = inform._itemData;
+        _itemInformList.Remove(itemData);
+
+        RemoveItem(itemData);
+        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
+    }
+    public void RefreshItemInfo(ItemData inform)
+    {
+        ItemInform item = new ItemInform
+        {
+            _itemName = "",
+            _itemData = new ItemData
+            {
+                _itemType = inform._itemType,
+                _itemGrade = inform._itemGrade,
+                _slotNumber = inform._slotNumber
+            },
+        };
+
+        CreateItem(item);
+    }
+    public Dictionary<int, GameObject> _itemDictionary = new Dictionary<int, GameObject>();
+    public void CreateItem(ItemInform inform, int index)
+    {
+        GameObject obj = GameManager.Instance._itemManager.CreateItem(index);
+        obj.GetComponent<ItemInform>().SetItemInform(inform);
+        _itemDictionary.Add(index, obj);
+
+        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
+    }
+    public void CreateItem(ItemInform inform)
+    {
+        int itemIndex = inform._itemData._slotNumber;
+        GameObject obj = GameManager.Instance._itemManager.CreateItem(itemIndex);
+        obj.GetComponent<ItemInform>().SetItemInform(inform);
+        _itemDictionary.Add(itemIndex, obj);
+
+        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
+    }
+    public void RelocateItem(int slotNumber, GameObject obj)
+    {
+        _itemDictionary.Add(slotNumber, obj);
+        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
+    }
+    public void RemoveItem(ItemData inform)
+    {
+        int itemIndex = inform._slotNumber;
+        GameObject item = null;
+        _itemDictionary.TryGetValue(itemIndex, out item);
+
+        if (item != null)
+        {
+            _itemDictionary.Remove(itemIndex);
         }
     }
 
@@ -141,6 +223,10 @@ public class UserSave
         _beeLvList[index] = value;
         GameManager.Instance._saveManager.SaveBeeInfos(_beeLvList);
     }
+    public List<int> USER_BEELVLIST
+    {
+        get => _beeLvList;
+    }
 
     [SerializeField] private List<int> _shopItemLvList = new List<int>();
 
@@ -148,6 +234,11 @@ public class UserSave
     {
         _shopItemLvList[index] = value;
         GameManager.Instance._saveManager.SaveShopItemInfos(_shopItemLvList);
+    }
+
+    public List<int> USER_SHOPITEMLVLIST
+    {
+        get => _shopItemLvList;
     }
 
     /// <summary>
@@ -171,22 +262,35 @@ public class UserSave
         USER_MAXEGG = 10;
         USER_MAXBEECOUNT = 5;
 
+        PlayerPrefs.DeleteKey("TowerInfoJsonStr");
+        PlayerPrefs.DeleteKey("ItemInfoJsonStr");
+        PlayerPrefs.DeleteKey("BeeInfoJsonStr");
+        PlayerPrefs.DeleteKey("ShopItemJsonStr");
+
         _towerInformList.Clear();
+        GameManager.Instance._saveManager.SaveTowerInfos(_towerInformList);
+        
+        _itemInformList.Clear();
+        GameManager.Instance._saveManager.SaveItemInfos(_itemInformList);
 
-        for (int i = 0; i < _beeLvList.Count; i++)
+        _beeLvList.Clear();
+        for (int i = 0; i < 10; i++)
         {
-            _beeLvList[i] = 0;
+            _beeLvList.Add(0);
         }
+        GameManager.Instance._saveManager.SaveBeeInfos(_beeLvList);
 
-        for (int i = 0; i < _shopItemLvList.Count; i++)
+        _shopItemLvList.Clear();
+        for (int i = 0; i < 14; i++)
         {
-            _shopItemLvList[i] = 0;
+            _shopItemLvList.Add(0);
         }
+        GameManager.Instance._saveManager.SaveShopItemInfos(_shopItemLvList);
     }
 
     public UserSave() { }
 
-    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerData> towerInfos, List<int> beeInfos, List<int> shopItemInfos)
+    public UserSave(string userName, int hasMoney, int currentHoney, int maxHoney, int currentEgg, int maxEgg, int maxBee, List<TowerData> towerInfos, List<ItemData> itemInfos, List<int> beeInfos, List<int> shopItemInfos)
     {
         _userName = userName;
         _hasMoney = hasMoney;
@@ -205,8 +309,22 @@ public class UserSave
         {
             // 타워 초기 생성
             for (int i = 0; i < _towerInformList.Count; i++)
-                CreateTower(_towerInformList[i]);
+                RefreshTowerInfo(_towerInformList[i]);
         }
+
+        _itemInformList = itemInfos;
+        if (_itemInformList == null)
+        {
+            _itemInformList = new List<ItemData>();
+        }
+        else
+        {
+            Debug.Log(_itemInformList.Count);
+            // 아이템 초기 생성
+            for (int i = 0; i < _itemInformList.Count; i++)
+                RefreshItemInfo(_itemInformList[i]);
+        }
+
 
         _beeLvList = beeInfos;
         if (_beeLvList == null)
@@ -219,8 +337,5 @@ public class UserSave
         {
             _shopItemLvList = new List<int>();
         }
-
     }
-
-
 }
